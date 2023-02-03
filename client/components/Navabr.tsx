@@ -31,29 +31,15 @@ const Navbar = () => {
         </Box>
         <Spacer />
         {context?.currentAccount ? (
-          <Button>Connected</Button>
+          <Button colorScheme="telegram">Connected</Button>
         ) : (
-          <Button onClick={() => context?.connectWallet()}>Connect</Button>
+          <Button
+            onClick={() => context?.connectWallet()}
+            colorScheme="telegram"
+          >
+            Connect
+          </Button>
         )}
-
-        <Box>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              icon={<FcMenu />}
-              variant="outlined"
-              color="red.400"
-            />
-            <MenuList>
-              <Link href="/">
-                <MenuItem icon={<FcHome />}>Home</MenuItem>
-              </Link>
-              <Link href="/about">
-                <MenuItem icon={<FcAbout />}>About</MenuItem>
-              </Link>
-            </MenuList>
-          </Menu>
-        </Box>
       </Flex>
     </Container>
   );

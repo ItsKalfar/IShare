@@ -15,6 +15,7 @@ type Props = {
 type ContextType = {
   currentAccount: string | null;
   connectWallet: Function;
+  userProfile: string;
   setProfile: Function;
 };
 
@@ -23,7 +24,6 @@ export const IShareContext = createContext<ContextType | null>(null);
 export const IShareContextProvider = ({ children }: Props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [userProfile, setUserProfile] = useState("");
-  const router = useRouter();
 
   const connectWallet = async (metamask = eth) => {
     try {
@@ -60,29 +60,14 @@ export const IShareContextProvider = ({ children }: Props) => {
     }
   };
 
-  const checkProfile = () => {
-    if (currentAccount !== null) {
-      if (userProfile === "holder") {
-        router.push("/holder");
-      }
-      if (userProfile === "issuer") {
-        router.push("/issuer");
-      }
-      if (userProfile === "verifier") {
-        router.push("/verifier");
-      }
-    }
-  };
-
   useEffect(() => {
     checkIfWalletIsConnected();
-    checkProfile();
     console.log("run");
   }, [currentAccount]);
 
   return (
     <IShareContext.Provider
-      value={{ currentAccount, connectWallet, setProfile }}
+      value={{ currentAccount, connectWallet, setProfile, userProfile }}
     >
       {children}
     </IShareContext.Provider>

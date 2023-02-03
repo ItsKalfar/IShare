@@ -1,11 +1,18 @@
-import { Toaster } from "react-hot-toast";
-import { useContext } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import { useContext, useState } from "react";
 import Head from "next/head";
 import { Flex, Container, Button, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { IShareContext } from "../../context/IShareContext";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+  const handleSignIn = (userProfile: string) => {
+    context?.setProfile(userProfile);
+    signIn();
+  };
+
   const context = useContext(IShareContext);
   return (
     <>
@@ -30,23 +37,23 @@ export default function Home() {
             <Button
               mx="6px"
               colorScheme="telegram"
-              onClick={() => context?.setProfile("holder")}
+              onClick={() => handleSignIn("holder")}
             >
-              <Link href="/holder">Student</Link>
+              <Link href="/api/auth/signin">Student</Link>
             </Button>
             <Button
               mx="6px"
               colorScheme="telegram"
-              onClick={() => context?.setProfile("issuer")}
+              onClick={() => handleSignIn("issuer")}
             >
-              <Link href="/issuer">College</Link>
+              <Link href="/api/auth/signIn">College</Link>
             </Button>
             <Button
               mx="6px"
               colorScheme="telegram"
-              onClick={() => context?.setProfile("verifier")}
+              onClick={() => handleSignIn("verifier")}
             >
-              <Link href="/verifier">Verifier</Link>
+              <Link href="/api/auth/signIn">Verifier</Link>
             </Button>
           </Flex>
         </Flex>
