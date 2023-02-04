@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { IShareContext } from "../../context/IShareContext";
 import Head from "next/head";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import {
   Flex,
   Container,
@@ -18,10 +18,9 @@ export default function Holder() {
     location: "",
     age: "",
   });
-  const context = useContext(IShareContext);
+  const { currentAccount, requestCredential } = useContext(IShareContext);
   const handleRequest = () => {
-    context?.requestCredential(input.userName, input.location, input.age);
-    console.log("Done");
+    requestCredential(input.userName, input.location, input.age);
   };
 
   return (
@@ -29,7 +28,8 @@ export default function Holder() {
       <Head>
         <title>Welcome {input.userName}</title>
       </Head>
-      {context?.currentAccount ? (
+      <Toaster position="top-center" reverseOrder={false} />
+      {currentAccount ? (
         <Container h="100vh">
           <Flex mt="24px">
             <FormControl>

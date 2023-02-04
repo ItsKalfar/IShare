@@ -5,14 +5,15 @@ import {
   Box,
   Spacer,
   Button,
-  Container,
   Text,
+  Container,
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { IShareContext } from "../context/IShareContext";
+import React from "react";
 
 const Navbar = () => {
-  const context = useContext(IShareContext);
+  const { currentAccount, connectWallet } = useContext(IShareContext);
   return (
     <Container maxW="1280px">
       <Flex py={6}>
@@ -34,13 +35,10 @@ const Navbar = () => {
           </Menu>
         </Box>
 
-        {context?.currentAccount ? (
+        {currentAccount ? (
           <Button colorScheme="telegram">Connected</Button>
         ) : (
-          <Button
-            onClick={() => context?.connectWallet()}
-            colorScheme="telegram"
-          >
+          <Button onClick={() => connectWallet()} colorScheme="telegram">
             Connect
           </Button>
         )}

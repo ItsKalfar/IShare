@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 import Head from "next/head";
 import { Flex, Container, Button, Text } from "@chakra-ui/react";
 import Link from "next/link";
+import React from "react";
 
 export default function Home() {
   return (

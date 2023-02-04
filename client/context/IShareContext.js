@@ -3,28 +3,17 @@ import { toast } from "react-hot-toast";
 import IShareABI from "../constants/IShareABI.json";
 import { ethers } from "ethers";
 
-let eth: any;
-let web3: any;
+let eth;
 
 if (typeof window !== "undefined") {
-  eth = (window as any).ethereum;
-  web3 = (window as any).web3;
+  eth = window.ethereum;
 }
 
-type Props = {
-  children: React.ReactNode;
-};
-type ContextType = {
-  currentAccount: string | null;
-  connectWallet: Function;
-  requestCredential: Function;
-};
+export const IShareContext = createContext();
 
-export const IShareContext = createContext<ContextType | null>(null);
-
-export const IShareContextProvider = ({ children }: Props) => {
+export const IShareContextProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState(null);
-  const IShareContract: string = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!;
+  let IShareContract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const ABI = IShareABI.abi;
 
   const connectWallet = async (metamask = eth) => {
@@ -56,16 +45,15 @@ export const IShareContextProvider = ({ children }: Props) => {
     }
   };
 
-  const requestCredential = async (
-    name: string,
-    location: string,
-    age: number
-  ) => {
+  const requestCredential = async (name, location, age) => {
     try {
-      if (typeof window.ethereum !== "undefined") {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
         const { ethereum } = window;
         if (ethereum) {
-          const provider = new ethers.;
+          let provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           if (!name || !location || !age) {
@@ -78,7 +66,7 @@ export const IShareContextProvider = ({ children }: Props) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 

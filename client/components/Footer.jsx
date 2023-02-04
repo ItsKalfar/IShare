@@ -1,4 +1,5 @@
 import { Box, Container } from "@chakra-ui/react";
+import React from "react";
 
 const Footer = () => (
   <Container maxW="1280px">
