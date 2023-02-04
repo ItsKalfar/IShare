@@ -1,12 +1,14 @@
 import React, { useState, createContext, useEffect } from "react";
-import { ethers } from "ethers";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/router";
+import IShareABI from "../constants/IShareABI.json";
+import { ethers } from "ethers";
 
 let eth: any;
+let web3: any;
 
 if (typeof window !== "undefined") {
   eth = (window as any).ethereum;
+  web3 = (window as any).web3;
 }
 
 type Props = {
@@ -15,15 +17,15 @@ type Props = {
 type ContextType = {
   currentAccount: string | null;
   connectWallet: Function;
-  userProfile: string;
-  setProfile: Function;
+  requestCredential: Function;
 };
 
 export const IShareContext = createContext<ContextType | null>(null);
 
 export const IShareContextProvider = ({ children }: Props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
-  const [userProfile, setUserProfile] = useState("");
+  const IShareContract: string = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!;
+  const ABI = IShareABI.abi;
 
   const connectWallet = async (metamask = eth) => {
     try {
@@ -54,20 +56,39 @@ export const IShareContextProvider = ({ children }: Props) => {
     }
   };
 
-  const setProfile = (profile: string) => {
-    if (currentAccount !== null) {
-      setUserProfile(profile);
+  const requestCredential = async (
+    name: string,
+    location: string,
+    age: number
+  ) => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.;
+          const signer = provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          if (!name || !location || !age) {
+            toast.error("Please Provide All The Details");
+          }
+          let reqCred = await IShare.requestCredentials(name, location, age);
+          IShare.on("RequestSent", () => {
+            toast.success("Request sent!");
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    console.log("run");
   }, [currentAccount]);
 
   return (
     <IShareContext.Provider
-      value={{ currentAccount, connectWallet, setProfile, userProfile }}
+      value={{ currentAccount, connectWallet, requestCredential }}
     >
       {children}
     </IShareContext.Provider>

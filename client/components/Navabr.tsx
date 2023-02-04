@@ -1,21 +1,15 @@
 import Link from "next/link";
 import {
   Menu,
-  MenuButton,
-  MenuList,
-  IconButton,
   Flex,
   Box,
   Spacer,
-  MenuItem,
   Button,
   Container,
   Text,
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { IShareContext } from "../context/IShareContext";
-
-import { FcMenu, FcAbout, FcHome } from "react-icons/fc";
 
 const Navbar = () => {
   const context = useContext(IShareContext);
@@ -30,6 +24,16 @@ const Navbar = () => {
           </Link>
         </Box>
         <Spacer />
+        <Box py={2} px={6}>
+          <Menu>
+            <Flex>
+              <Link href="/about">
+                <Text fontSize="lg">About</Text>
+              </Link>
+            </Flex>
+          </Menu>
+        </Box>
+
         {context?.currentAccount ? (
           <Button colorScheme="telegram">Connected</Button>
         ) : (
