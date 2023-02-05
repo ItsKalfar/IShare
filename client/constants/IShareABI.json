@@ -2,11 +2,6 @@
   "abi": [
     {
       "inputs": [],
-      "name": "AlreadyRequested",
-      "type": "error"
-    },
-    {
-      "inputs": [],
       "name": "AlreadySigned",
       "type": "error"
     },
@@ -72,6 +67,19 @@
     },
     {
       "inputs": [],
+      "name": "_requestedID",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "_userID",
       "outputs": [
         {
@@ -86,13 +94,8 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "userId",
-          "type": "address"
-        },
-        {
           "internalType": "uint256",
-          "name": "userNo",
+          "name": "_userId",
           "type": "uint256"
         }
       ],
@@ -104,14 +107,9 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "userId",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "recipientId",
-          "type": "address"
+          "internalType": "uint256",
+          "name": "_userId",
+          "type": "uint256"
         }
       ],
       "name": "checkConcent",
@@ -128,9 +126,138 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "_userId",
+          "type": "uint256"
+        }
+      ],
+      "name": "dismissRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getCurrentUserId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getCurrentrecipientId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
-          "name": "userId",
+          "name": "_verifierAddress",
           "type": "address"
+        }
+      ],
+      "name": "getPermittedVerifier",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_userCurrentId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getUsers",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "userId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "userAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "userName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "userLocation",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userAge",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "userSigned",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "isseuerSigned",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "issuerId",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "issueDate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IShare.UserCredentials",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_userId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_recipientId",
+          "type": "uint256"
         },
         {
           "internalType": "address",
@@ -146,17 +273,19 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "userId",
-          "type": "address"
-        },
-        {
           "internalType": "uint256",
-          "name": "userNo",
+          "name": "_userId",
           "type": "uint256"
         }
       ],
       "name": "issueCredentials",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "requestConcent",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -187,9 +316,28 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "_userId",
+          "type": "uint256"
+        }
+      ],
+      "name": "requestedAccounts",
+      "outputs": [
+        {
           "internalType": "address",
-          "name": "userId",
+          "name": "",
           "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_userId",
+          "type": "uint256"
         },
         {
           "internalType": "address",
@@ -210,75 +358,16 @@
           "type": "uint256"
         }
       ],
-      "name": "s_Users",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "userNo",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "userId",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "userName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "userLocation",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "userAge",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "userSigned",
-          "type": "bool"
-        },
-        {
-          "internalType": "bool",
-          "name": "isseuerSigned",
-          "type": "bool"
-        },
-        {
-          "internalType": "address",
-          "name": "issuerId",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "issueDate",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
       "name": "s_allUsers",
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "userNo",
+          "name": "userId",
           "type": "uint256"
         },
         {
           "internalType": "address",
-          "name": "userId",
+          "name": "userAddress",
           "type": "address"
         },
         {
@@ -342,14 +431,28 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "userId",
-          "type": "address"
-        },
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "s_requestedVerifier",
+      "outputs": [
         {
           "internalType": "address",
-          "name": "recipientId",
+          "name": "",
           "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_userId",
+          "type": "uint256"
         }
       ],
       "name": "verifyUser",

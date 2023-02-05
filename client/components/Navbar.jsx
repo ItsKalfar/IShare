@@ -15,8 +15,8 @@ import { IShareContext } from "../context/IShareContext";
 const Navbar = () => {
   const { currentAccount, connectWallet } = useContext(IShareContext);
   return (
-    <Container maxW="1280px">
-      <Flex py={6}>
+    <Container maxW="1280px" py="16px">
+      <Flex>
         <Box>
           <Link href="/">
             <Text fontSize="2xl" fontWeight="bold">
