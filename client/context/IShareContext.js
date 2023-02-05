@@ -15,7 +15,6 @@ export const IShareContextProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const IShareContract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
-  const rpcUrl = process.env.NEXT_PUBLIC_RPC;
   const ABI = IShareABI.abi;
 
   const connectWallet = async () => {
