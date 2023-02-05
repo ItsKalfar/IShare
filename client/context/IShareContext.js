@@ -1,7 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import IShareABI from "../constants/IShareABI.json";
 import { ethers } from "ethers";
+import IShareABI from "../constants/IShareABI.json";
 
 let eth;
 
@@ -13,21 +13,19 @@ export const IShareContext = createContext();
 
 export const IShareContextProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState(null);
-  let IShareContract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+  const [isRequested, setIsRequested] = useState(false);
+  const IShareContract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const ABI = IShareABI.abi;
 
-  const connectWallet = async (metamask = eth) => {
+  const connectWallet = async () => {
     try {
-      if (!metamask) return toast.error("Please install Metamask First");
-      const accounts = await metamask.request({
+      if (!window.ethereum) return toast.error("Please install Metamask first");
+      const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-
       setCurrentAccount(accounts[0]);
-
-      toast.success("Wallet Connected!");
     } catch (error) {
-      toast.error("Sumthing Went Wrong");
+      toast.error(error.message);
     }
   };
 
@@ -41,28 +39,31 @@ export const IShareContextProvider = ({ children }) => {
         setCurrentAccount(accounts[0]);
       }
     } catch (error) {
-      toast.error("Sumthing Went Wrong");
+      console.log(error.message);
     }
   };
 
   const requestCredential = async (name, location, age) => {
     try {
+      if (!name || !location || !age) {
+        return toast.error("Please provide all details");
+      }
+
       if (
         typeof window.ethereum !== "undefined" ||
         typeof window.web3 !== "undefined"
       ) {
         const { ethereum } = window;
         if (ethereum) {
-          let provider = new ethers.providers.Web3Provider(ethereum);
-          const signer = provider.getSigner();
-          const IShare = new ethers.Contract(IShareContract, ABI, signer);
-          if (!name || !location || !age) {
-            toast.error("Please Provide All The Details");
+          if (!isRequested) {
+            const provider = new ethers.BrowserProvider(ethereum);
+            const signer = await provider.getSigner();
+            const IShare = new ethers.Contract(IShareContract, ABI, signer);
+            let tx = await IShare.requestCredentials(name, location, age);
+            await tx.wait();
+            toast.success("Request Sent!");
+            setIsRequested(true);
           }
-          let reqCred = await IShare.requestCredentials(name, location, age);
-          IShare.on("RequestSent", () => {
-            toast.success("Request sent!");
-          });
         }
       }
     } catch (error) {
@@ -76,7 +77,7 @@ export const IShareContextProvider = ({ children }) => {
 
   return (
     <IShareContext.Provider
-      value={{ currentAccount, connectWallet, requestCredential }}
+      value={{ connectWallet, currentAccount, requestCredential, isRequested }}
     >
       {children}
     </IShareContext.Provider>

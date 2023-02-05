@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import {
   Menu,
@@ -10,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { IShareContext } from "../context/IShareContext";
-import React from "react";
 
 const Navbar = () => {
   const { currentAccount, connectWallet } = useContext(IShareContext);

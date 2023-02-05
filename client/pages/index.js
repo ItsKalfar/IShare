@@ -1,16 +1,14 @@
-import { Toaster } from "react-hot-toast";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 import { Flex, Container, Button, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import React from "react";
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Welcome to IShare</title>
+        <title>Welcome to Ishare</title>
       </Head>
-
       <Toaster position="top-center" reverseOrder={false} />
 
       <Container maxW="1280px">

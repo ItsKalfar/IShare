@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListIcon,
-  StatArrow,
 } from "@chakra-ui/react";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
 import Head from "next/head";
