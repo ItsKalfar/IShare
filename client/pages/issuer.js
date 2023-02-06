@@ -13,10 +13,11 @@ import {
   CardFooter,
   SimpleGrid,
   Heading,
+  Box,
 } from "@chakra-ui/react";
 
 export default function issuer() {
-  const { currentAccount, requestCredential, allUsers } =
+  const { currentAccount, allUsers, issueCred, dissmissCred } =
     useContext(IShareContext);
   return (
     <>
@@ -27,100 +28,136 @@ export default function issuer() {
 
       {currentAccount ? (
         <Container h="100vh" maxW="100%" bg="gray.100" py="24px">
-          <Flex mt="24px" maxW="1100px" mx="auto">
-            {allUsers.map((user) => {
-              const {
-                userId,
-                userAddress,
-                userName,
-                userLocation,
-                userAge,
-                userSigned,
-                issuerSigned,
-                isserId,
-                issueDate,
-              } = user;
+          <Flex
+            mt="24px"
+            maxW="1100px"
+            mx="auto"
+            flexDirection={"column-reverse"}
+          >
+            <Flex pb="24px">
+              <Text fontSize={"2xl"} fontWeight={"800"} mr="22px">
+                Active
+              </Text>
+              {allUsers.map((user) => {
+                const {
+                  userId,
+                  userAddress,
+                  userName,
+                  userLocation,
+                  userAge,
+                  userSigned,
+                  issuerSigned,
+                  issuerId,
+                  issueDate,
+                } = user;
 
-              let usersAge = parseInt(userAge);
+                if (issuerSigned) {
+                  return (
+                    <Box key={userId}>
+                      <Card maxW="300px" minW="300px" mx="12px">
+                        <CardHeader>
+                          <Heading size="md">{userName}</Heading>
+                        </CardHeader>
+                        <CardBody>
+                          <Text>User Id :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {userAddress.slice(0, 5) +
+                              "..." +
+                              userAddress.slice(35, 42)}
+                          </Text>
+                          <Text>Issuer Id :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {issuerId.slice(0, 5) +
+                              "..." +
+                              issuerId.slice(35, 42)}
+                          </Text>
+                          <Text>Location :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {userLocation}
+                          </Text>
+                          <Text>Age :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {userAge}
+                          </Text>
+                        </CardBody>
+                      </Card>
+                    </Box>
+                  );
+                }
+              })}
+            </Flex>
+            <Flex mb="24px">
+              <Text fontSize={"2xl"} fontWeight={"800"}>
+                Pending
+              </Text>
+              {allUsers.map((user) => {
+                const {
+                  userId,
+                  userAddress,
+                  userName,
+                  userLocation,
+                  userAge,
+                  userSigned,
+                  issuerSigned,
+                  issuerId,
+                  issueDate,
+                } = user;
 
-              if (userSigned && issuerSigned) {
-                return (
-                  <SimpleGrid
-                    spacing="4"
-                    templateColumns="repeat(auto-fill, minmax(200px, 0.8fr))"
-                    key={userId}
-                  >
-                    <Card>
-                      <CardHeader>
-                        <Heading size="md">{userName}</Heading>
-                      </CardHeader>
-                      <CardBody>
-                        <Text>{userAddress}</Text>
-                        <Text>{userLocation}</Text>
-                        <Text>{usersAge}</Text>
-                      </CardBody>
-                      <CardFooter>
-                        <Button colorScheme="telegram">View here</Button>
-                      </CardFooter>
-                    </Card>
-                  </SimpleGrid>
-                );
-              }
-            })}
-            {allUsers.map((user) => {
-              const {
-                userId,
-                userAddress,
-                userName,
-                userLocation,
-                userAge,
-                userSigned,
-                issuerSigned,
-                isserId,
-                issueDate,
-              } = user;
-
-              return (
-                <SimpleGrid
-                  templateColumns="repeat(3, 0.5fr))"
-                  key={userId}
-                  w="100%"
-                >
-                  <Card maxW="300px" minW="200px" mx="12px">
-                    <CardHeader>
-                      <Heading size="md">{userName}</Heading>
-                    </CardHeader>
-                    <CardBody>
-                      <Text>
-                        {userAddress.slice(0, 5) +
-                          "..." +
-                          userAddress.slice(35, 42)}
-                      </Text>
-                      <Text>{userLocation}</Text>
-                      <Text>{userAge}</Text>
-                      <Text>
-                        {"Issue Date : " +
-                          issueDate.getDate() +
-                          "/" +
-                          issueDate.getMonth() +
-                          "/" +
-                          issueDate.getFullYear()}
-                      </Text>
-                    </CardBody>
-                    <CardFooter>
-                      <Flex>
-                        <Button colorScheme="telegram" w="100%">
-                          Issue
-                        </Button>
-                        <Button mx="4px" colorScheme="red" w="100%">
-                          Dismiss
-                        </Button>
-                      </Flex>
-                    </CardFooter>
-                  </Card>
-                </SimpleGrid>
-              );
-            })}
+                if (!issuerSigned) {
+                  return (
+                    <Box key={userId} w="100%">
+                      {" "}
+                      <Card maxW="300px" minW="300px" mx="12px">
+                        <CardHeader>
+                          <Heading size="md">{userName}</Heading>
+                        </CardHeader>
+                        <CardBody>
+                          <Text>User Id :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {userAddress.slice(0, 5) +
+                              "..." +
+                              userAddress.slice(35, 42)}
+                          </Text>
+                          <Text>Issuer Id :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {issuerId.slice(0, 5) +
+                              "..." +
+                              issuerId.slice(35, 42)}
+                          </Text>
+                          <Text>Location :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {userLocation}
+                          </Text>
+                          <Text>Age :</Text>
+                          <Text pl="8px" mb="8px" fontWeight={"600"}>
+                            {userAge}
+                          </Text>
+                        </CardBody>
+                        <CardFooter>
+                          <Flex>
+                            <Button
+                              colorScheme="telegram"
+                              w="100%"
+                              onClick={() => issueCred(userId)}
+                            >
+                              Issue
+                            </Button>
+                            <Button
+                              mx="4px"
+                              colorScheme="red"
+                              w="100%"
+                              onClick={() => dissmissCred(userId)}
+                            >
+                              Dismiss
+                            </Button>
+                          </Flex>
+                        </CardFooter>
+                      </Card>
+                    </Box>
+                  );
+                }
+              })}
+            </Flex>
           </Flex>
         </Container>
       ) : (

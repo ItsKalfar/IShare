@@ -14,6 +14,7 @@ export const IShareContext = createContext();
 export const IShareContextProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
+  const [requests, setRequests] = useState([]);
   const IShareContract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const ABI = IShareABI.abi;
 
@@ -60,16 +61,19 @@ export const IShareContextProvider = ({ children }) => {
             let getCred = await IShare.getUsers(index);
             let user = {
               userId: getCred.userId.toString(),
-              userAddress: getCred.userAddress.toString(),
+              userAddress: getCred.userAddress.toString().toLowerCase(),
               userName: getCred.userName.toString(),
               userLocation: getCred.userLocation.toString(),
               userAge: getCred.userAge.toString(),
               userSigned: getCred.userSigned,
-              issuerSigned: getCred.issuerSigned,
-              issuerId: getCred.issuerId.toString(),
+              issuerSigned: getCred.isseuerSigned,
+              issuerId: getCred.issuerId.toString().toLowerCase(),
               issueDate: new Date(parseInt(getCred.issueDate)),
             };
-            setAllUsers((prev) => [user, ...prev]);
+
+            if (user.userId != 0) {
+              setAllUsers((prev) => [user, ...prev]);
+            }
           }
         }
       }
@@ -184,17 +188,140 @@ export const IShareContextProvider = ({ children }) => {
       toast.error(error.message);
     }
   };
-  const giveCon = async (userId, verifierId, verifierAddress) => {};
-  const revokeCon = async (userId, verifierAddress) => {};
-  const checkCon = async (userId, verifierAddress) => {};
-  const verify = async (userId, verifierAddress) => {};
-  const getVerifier = async (verifierAddress) => {};
-  const reqAccounts = async (userId) => {};
+  const giveCon = async (userId, verifierId, verifierAddress) => {
+    try {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.BrowserProvider(ethereum);
+          const signer = await provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          let tx = await IShare.giveConcent(
+            userId,
+            verifierId,
+            verifierAddress
+          );
+          await tx.wait();
+          toast.success("Concent given!");
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const revokeCon = async (userId, verifierAddress) => {
+    try {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.BrowserProvider(ethereum);
+          const signer = await provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          let tx = await IShare.revokeConcent(userId, verifierAddress);
+          await tx.wait();
+          toast.success("Concent given!");
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const checkCon = async (userId) => {
+    try {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.BrowserProvider(ethereum);
+          const signer = await provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          let tx = await IShare.checkConcent(userId);
+          await tx.wait();
+          toast.success("Concent given!");
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const verify = async (userId) => {
+    try {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.BrowserProvider(ethereum);
+          const signer = await provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          let tx = await IShare.verifyUser(userId);
+          await tx.wait();
+          toast.success("Concent given!");
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const getVerifier = async (verifierAddress) => {
+    try {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.BrowserProvider(ethereum);
+          const signer = await provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          let tx = await IShare.getPermittedVerifier(verifierAddress);
+          await tx.wait();
+          toast.success("Concent given!");
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const reqAccounts = async () => {
+    try {
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.BrowserProvider(ethereum);
+          const signer = await provider.getSigner();
+          const IShare = new ethers.Contract(IShareContract, ABI, signer);
+          let userId = await IShare.getCurrentrecipientId();
+          userId = parseInt(userId);
+          for (let index = 1; index <= userId; index++) {
+            let tx = await IShare.requestAccounts(userId);
+            setRequests(tx);
+            console.log(tx);
+          }
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     checkIfWalletIsConnected();
     if (currentAccount) {
       getCredentials();
+      reqAccounts();
     }
   }, [currentAccount]);
 
@@ -205,7 +332,16 @@ export const IShareContextProvider = ({ children }) => {
         currentAccount,
         requestCredential,
         allUsers,
-        issue,
+        requests,
+        issueCred,
+        dissmissCred,
+        acceptCred,
+        requestCon,
+        giveCon,
+        revokeCon,
+        checkCon,
+        verify,
+        getVerifier,
       }}
     >
       {children}

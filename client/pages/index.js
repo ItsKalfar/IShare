@@ -24,10 +24,10 @@ export default function Home() {
           </Text>
           <Flex alignItems="center" justifyContent="space-between">
             <Button mx="6px" colorScheme="telegram">
-              <Link href="/holder">Student</Link>
+              <Link href="/holder">Holder</Link>
             </Button>
             <Button mx="6px" colorScheme="telegram">
-              <Link href="/issuer">College</Link>
+              <Link href="/issuer">Issuer</Link>
             </Button>
             <Button mx="6px" colorScheme="telegram">
               <Link href="/verifier">Verifier</Link>
