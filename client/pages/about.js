@@ -80,6 +80,16 @@ const About = () => {
               contract. Also, currently not mobile responsive at this moment.
             </Text>
             <Text my="12px" fontSize="lg">
+              Take a look at code in this{" "}
+              <Link
+                href="https://github.com/ItsKalfar/IShare"
+                target="_blank"
+                className="link"
+              >
+                Github repository.
+              </Link>
+            </Text>
+            <Text my="12px" fontSize="lg">
               In case of any difficulty or question, connect with me at{" "}
               <Link
                 href="https://twitter.com/HeyitsSagar20"
