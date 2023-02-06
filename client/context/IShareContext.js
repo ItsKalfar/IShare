@@ -41,7 +41,7 @@ export const IShareContextProvider = ({ children }) => {
         setCurrentAccount(accounts[0]);
       }
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -100,7 +100,7 @@ export const IShareContextProvider = ({ children }) => {
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.requestCredentials(name, location, age);
           await tx.wait();
-          toast.success("Request Sent!");
+          toast.success("Request Sent! Please refresh the page");
         }
       }
     } catch (error) {
@@ -121,7 +121,7 @@ export const IShareContextProvider = ({ children }) => {
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.issueCredentials(userId);
           await tx.wait();
-          toast.success("Issued!");
+          toast.success("Issued! Please refresh the page");
         }
       }
     } catch (error) {
@@ -142,7 +142,7 @@ export const IShareContextProvider = ({ children }) => {
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.dismissRequest(userId);
           await tx.wait();
-          toast.success("Dismissed");
+          toast.success("Dismissed! Please refresh the page");
         }
       }
     } catch (error) {
@@ -162,7 +162,7 @@ export const IShareContextProvider = ({ children }) => {
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.acceptCredentials(userId);
           await tx.wait();
-          toast.success("Accepted");
+          toast.success("Accepted! Please refresh the page");
         }
       }
     } catch (error) {
@@ -182,7 +182,7 @@ export const IShareContextProvider = ({ children }) => {
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.requestConcent();
           await tx.wait();
-          toast.success("Request Sent");
+          toast.success("Request Sent! Please refresh the page");
         }
       }
     } catch (error) {
@@ -206,7 +206,7 @@ export const IShareContextProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
   const revokeCon = async (userId, verifierAddress) => {
@@ -222,7 +222,7 @@ export const IShareContextProvider = ({ children }) => {
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.revokeConcent(userId, verifierAddress);
           await tx.wait();
-          toast.success("Concent given!");
+          toast.success("Concent revoked!");
         }
       }
     } catch (error) {
