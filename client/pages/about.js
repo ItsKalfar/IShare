@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
 import Head from "next/head";
+import Link from "next/link";
 
 const About = () => {
   return (
@@ -29,16 +30,14 @@ const About = () => {
               <ListItem my="6px">
                 <ListIcon as={BsFillArrowDownCircleFill} color="green.500" />
                 Holder sends the request to the issuer to issue the credentials.
-                In our case a student is requesting an ID to his/her college.
               </ListItem>
               <ListItem my="6px">
                 <ListIcon as={BsFillArrowDownCircleFill} color="green.500" />
-                College which is issuer in this case accepts the request and
-                issue the ID card to the student with college's ID.
+                Issuer accepts the request and issue the ID card.
               </ListItem>
               <ListItem my="6px">
                 <ListIcon as={BsFillArrowDownCircleFill} color="green.500" />
-                Student accepts the credentials and signes it too. Until then,
+                Holder accepts the credentials and signes it too. Until then,
                 the card is not issued.
               </ListItem>
               <ListItem my="6px">
@@ -62,7 +61,7 @@ const About = () => {
               </ListItem>
               <ListItem my="6px">
                 <ListIcon as={BsFillArrowDownCircleFill} color="green.500" />
-                Student can also revoke the concent if needed.
+                Holder can also revoke the concent if needed.
               </ListItem>
             </List>
           </Box>
@@ -76,23 +75,19 @@ const About = () => {
               information. This provides enhanced security and privacy to the
               system, as sensitive information is kept confidential.
             </Text>
-            <Text my="24px" fontSize="lg">
-              The use of Solidity in the system allows for the creation of
-              self-executing contracts, which are stored on the Ethereum
-              blockchain. These contracts can be triggered automatically when
-              specific conditions are met, thereby enabling the creation of
-              complex and automated processes. The combination of Next.js and
-              Chakra UI provides a seamless user experience and a responsive,
-              modern design.
+            <Text my="12px" fontSize="lg">
+              This project does not catches custom errors from the smart
+              contract. Also, currently not mobile responsive at this moment.
             </Text>
-            <Text my="24px" fontSize="lg">
-              The system has been built to provide a secure and user-friendly
-              platform for a variety of use cases. The use of zero knowledge
-              proofs ensures that user's data and transactions are kept secure,
-              while the use of the Ethereum blockchain provides immutability and
-              censorship resistance. Overall, this system represents a major
-              step forward in the development of secure, decentralized
-              technologies.
+            <Text my="12px" fontSize="lg">
+              In case of any difficulty or question, connect with me at{" "}
+              <Link
+                href="https://twitter.com/HeyitsSagar20"
+                target="_blank"
+                className="link"
+              >
+                @HeyitsSagar20
+              </Link>
             </Text>
           </Box>
         </Box>
