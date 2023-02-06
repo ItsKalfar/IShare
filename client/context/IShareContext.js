@@ -15,6 +15,7 @@ export const IShareContextProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [verifier, setVerifier] = useState([]);
   const IShareContract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const ABI = IShareABI.abi;
 
@@ -188,7 +189,7 @@ export const IShareContextProvider = ({ children }) => {
       toast.error(error.message);
     }
   };
-  const giveCon = async (userId, verifierId, verifierAddress) => {
+  const giveCon = async (userId, verifierAddress) => {
     try {
       if (
         typeof window.ethereum !== "undefined" ||
@@ -199,17 +200,13 @@ export const IShareContextProvider = ({ children }) => {
           const provider = new ethers.BrowserProvider(ethereum);
           const signer = await provider.getSigner();
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
-          let tx = await IShare.giveConcent(
-            userId,
-            verifierId,
-            verifierAddress
-          );
+          let tx = await IShare.giveConcent(userId, verifierAddress);
           await tx.wait();
           toast.success("Concent given!");
         }
       }
     } catch (error) {
-      toast.error(error.message);
+      console.log(error);
     }
   };
   const revokeCon = async (userId, verifierAddress) => {
@@ -232,26 +229,7 @@ export const IShareContextProvider = ({ children }) => {
       toast.error(error.message);
     }
   };
-  const checkCon = async (userId) => {
-    try {
-      if (
-        typeof window.ethereum !== "undefined" ||
-        typeof window.web3 !== "undefined"
-      ) {
-        const { ethereum } = window;
-        if (ethereum) {
-          const provider = new ethers.BrowserProvider(ethereum);
-          const signer = await provider.getSigner();
-          const IShare = new ethers.Contract(IShareContract, ABI, signer);
-          let tx = await IShare.checkConcent(userId);
-          await tx.wait();
-          toast.success("Concent given!");
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+
   const verify = async (userId) => {
     try {
       if (
@@ -264,8 +242,12 @@ export const IShareContextProvider = ({ children }) => {
           const signer = await provider.getSigner();
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.verifyUser(userId);
-          await tx.wait();
-          toast.success("Concent given!");
+          if (tx === true) {
+            toast.success("Verified!");
+          }
+          if (tx === false) {
+            toast.error("Don't have concent or not adult");
+          }
         }
       }
     } catch (error) {
@@ -284,8 +266,12 @@ export const IShareContextProvider = ({ children }) => {
           const signer = await provider.getSigner();
           const IShare = new ethers.Contract(IShareContract, ABI, signer);
           let tx = await IShare.getPermittedVerifier(verifierAddress);
-          await tx.wait();
-          toast.success("Concent given!");
+          if (tx == true) {
+            toast.success("Concent is given");
+          }
+          if (tx == false) {
+            toast.error("Concent is not given");
+          }
         }
       }
     } catch (error) {
@@ -306,9 +292,9 @@ export const IShareContextProvider = ({ children }) => {
           let userId = await IShare.getCurrentrecipientId();
           userId = parseInt(userId);
           for (let index = 1; index <= userId; index++) {
-            let tx = await IShare.requestAccounts(userId);
-            setRequests(tx);
-            console.log(tx);
+            let tx = await IShare.requestedAccounts(index);
+            tx = tx.toLowerCase();
+            setRequests((prev) => [tx, ...prev]);
           }
         }
       }
@@ -339,9 +325,9 @@ export const IShareContextProvider = ({ children }) => {
         requestCon,
         giveCon,
         revokeCon,
-        checkCon,
         verify,
         getVerifier,
+        verifier,
       }}
     >
       {children}

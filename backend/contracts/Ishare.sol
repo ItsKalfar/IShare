@@ -112,22 +112,14 @@ contract IShare {
         s_requestedVerifier[currentId] = msg.sender;
     }
 
-    function giveConcent(
-        uint256 _userId,
-        uint256 _recipientId,
-        address recipientId
-    ) external {
+    function giveConcent(uint256 _userId, address _recipientId) external {
         if (s_allUsers[_userId].userAddress != msg.sender) {
             revert NotOwner();
         }
         if (s_allUsers[_userId].isseuerSigned == false) {
             revert NotSigned();
         }
-        if (s_requestedVerifier[_recipientId] != recipientId) {
-            revert NotRequestedYet();
-        }
-
-        s_permittedVerfier[recipientId] = true;
+        s_permittedVerfier[_recipientId] = true;
         emit GiveConcent();
     }
 

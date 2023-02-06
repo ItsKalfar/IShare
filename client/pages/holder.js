@@ -24,6 +24,7 @@ export default function Holder() {
     location: "",
     age: "",
   });
+  const [resId, setResId] = useState("");
   const {
     currentAccount,
     requestCredential,
@@ -32,6 +33,7 @@ export default function Holder() {
     requests,
     giveCon,
     revokeCon,
+    getVerifier,
   } = useContext(IShareContext);
 
   return (
@@ -46,7 +48,7 @@ export default function Holder() {
             maxW={"1100px"}
             mx="auto"
             alignItems={"flex-start"}
-            justifyContent="space-between"
+            justifyContent="flex-start"
           >
             <Box>
               <Flex mt="24px" maxW="512px">
@@ -105,17 +107,12 @@ export default function Holder() {
                     userName,
                     userLocation,
                     userAge,
-                    userSigned,
+
                     issuerSigned,
                     issuerId,
-                    issueDate,
                   } = user;
 
-                  if (
-                    issuerSigned == true &&
-                    userAddress == currentAccount &&
-                    userSigned == false
-                  ) {
+                  if (issuerSigned == true && userAddress == currentAccount) {
                     return (
                       <SimpleGrid
                         templateColumns="repeat(3, 1fr))"
@@ -178,7 +175,6 @@ export default function Holder() {
                     userSigned,
                     issuerSigned,
                     issuerId,
-                    issueDate,
                   } = user;
 
                   if (
@@ -187,13 +183,7 @@ export default function Holder() {
                     userSigned == true
                   ) {
                     return (
-                      <SimpleGrid
-                        templateColumns="repeat(3, 1fr))"
-                        key={userId}
-                        py="24px"
-                        mx="auto"
-                        w="512px"
-                      >
+                      <Box key={userId} py="24px" mx="auto" w="512px">
                         <Card minW="200px">
                           <CardHeader>
                             <Heading size="md">{userName}</Heading>
@@ -219,20 +209,68 @@ export default function Holder() {
                             <Text pl="8px" mb="8px" fontWeight={"600"}>
                               {userAge}
                             </Text>
-
-                            <Text>{issuerSigned}</Text>
+                            <Input
+                              type={"text"}
+                              placeholder="Enter receiptant address"
+                              onChange={(e) => setResId(e.target.value)}
+                            />
                           </CardBody>
+                          <Flex flexDirection={"column"}>
+                            <Button
+                              colorScheme="telegram"
+                              w="90%"
+                              my="6px"
+                              mx="auto"
+                              onClick={() => giveCon(userId, resId)}
+                            >
+                              Give Concent
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              w="90%"
+                              my="6px"
+                              mb="24px"
+                              mx="auto"
+                              onClick={() => revokeCon(userId, resId)}
+                            >
+                              Revoke Concent
+                            </Button>
+                          </Flex>
                         </Card>
-                      </SimpleGrid>
+                      </Box>
                     );
                   }
                 })}
               </Box>
             </Box>
-            <Box>
+            <Box mx={"24px"}>
               <Text fontWeight={"700"} fontSize={"xl"}>
                 Requests
               </Text>
+              {requests.map((request) => {
+                return (
+                  <Card
+                    key={request}
+                    my={"24px"}
+                    borderRadius={"8px"}
+                    py={"16px"}
+                    px={"16px"}
+                    w="450px"
+                  >
+                    <Text fontWeight={"700"}>Receiptant Id :</Text>
+                    <Text py="2px" px="8px">
+                      {request}
+                    </Text>
+                    <Button
+                      colorScheme={"telegram"}
+                      my="12px"
+                      onClick={() => getVerifier(request)}
+                    >
+                      Check Concent
+                    </Button>
+                  </Card>
+                );
+              })}
             </Box>
           </Flex>
         </Container>
@@ -240,9 +278,6 @@ export default function Holder() {
         <Container h="100vh">
           <Flex alignItems="center" justifyContent="center">
             <Text>Please Connect Wallet First</Text>
-            {requests.map((request) => {
-              return <Text>{request}</Text>;
-            })}
           </Flex>
         </Container>
       )}

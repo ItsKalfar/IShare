@@ -36,7 +36,9 @@ const Navbar = () => {
         </Box>
 
         {currentAccount ? (
-          <Button colorScheme="telegram">Connected</Button>
+          <Button colorScheme="telegram">
+            {currentAccount.slice(0, 5) + "..." + currentAccount.slice(38, 42)}
+          </Button>
         ) : (
           <Button onClick={() => connectWallet()} colorScheme="telegram">
             Connect
